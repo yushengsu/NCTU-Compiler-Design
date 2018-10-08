@@ -1,0 +1,27 @@
+# NCTU-Compiler_Design-HW1-Lex
+
+	## Abilites
+		- parse string into token defined by spec.
+		- print out token type and content.
+		- output source code with line number.
+
+
+	## Platform
+		- linux with flex and gcc compiler.
+		- Worked in linux.cs.nctu.tw work-station.
+
+
+	## How to run scanner
+	- tpye make in directory with Makefile.
+  
+  		`code...
+    		./0516041> make all
+  		`...
+
+	- 0516041.l should be in the same directory with Makefile.
+	- read input file as an argument while executing ./scanner.
+
+-------------------------------------------------------------------
+Signature  : 蘇裕盛(Yu Sheng Su)
+Student_ID : 0516041
+-------------------------------------------------------------------
