@@ -15,7 +15,7 @@
 	- tpye make in directory with Makefile.
   
   		`code...
-    		./0516041> make all
+    		./0516041> make
   		`...
 
 	- 0516041.l should be in the same directory with Makefile.
