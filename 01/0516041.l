@@ -23,7 +23,7 @@ letter [_a-zA-Z]
 id {letter}({letter}|{digit})*
 integer (0|([1-9]{digit}*)) 
 float {digit}+\.{digit}+
-scientific ({float}|{integer})[eE][\+\-]?{digit}+
+scientific ({float}|0*{integer})[eE][\+\-]?{digit}+
 space [ \t]+
 
 
