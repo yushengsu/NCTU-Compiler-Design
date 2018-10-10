@@ -199,7 +199,7 @@ space [ \t]+
     BEGIN 0;
 }
 
-^("#pragma")  {
+^("#pragma")(" ")+  {
     LIST;
     BEGIN(PRAGMA);
 }
@@ -213,17 +213,17 @@ space [ \t]+
     exit(1);
 }
 
-<PRAGMA>("source") {
+<PRAGMA>("source")(" ")+ {
     LIST;
     BEGIN(PRAG_SOURCE);
 }
 
-<PRAGMA>("token") {
+<PRAGMA>("token")(" ")+ {
     LIST;
     BEGIN(PRAG_TOKEN);
 }
 
-<PRAGMA>("statistic") {
+<PRAGMA>("statistic")(" ")+ {
     LIST;
     BEGIN(PRAG_STATISTIC);
 }
