@@ -36,7 +36,7 @@ space [ \t]+
 %x PRAG_SOURCE
 %x PRAG_TOKEN
 %x PRAG_STATISTIC
-
+%x PRAG_END
 
 %%
 
@@ -204,10 +204,6 @@ space [ \t]+
     BEGIN(PRAGMA);
 }
 
-<PRAGMA>(" ") {
-    LIST;
-}
-
 <PRAGMA>("\n") {
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
     exit(1);
@@ -228,10 +224,11 @@ space [ \t]+
     BEGIN(PRAG_STATISTIC);
 }
 
-
-<PRAG_SOURCE>(" ") {
-    LIST;
+<PRAGMA>(.) { // Unrecognized character
+    fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
+    exit(1);
 }
+
 
 <PRAG_SOURCE>("\n") {
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
@@ -241,23 +238,13 @@ space [ \t]+
 <PRAG_SOURCE>("on") {
     LIST;
     Opt_Source = 1;
-    BEGIN 0;
+    BEGIN(PRAG_END);
 }
 
 <PRAG_SOURCE>("off") {
     LIST;
     Opt_Source = 0;
-    BEGIN 0;
-}
-
-<PRAG_SOURCE>("/*") {
-    LIST; 
-    BEGIN(COMMENT_C); 
-}
-
-<PRAG_SOURCE>("//") {
-    LIST;
-    BEGIN(COMMENT_CPP);
+    BEGIN(PRAG_END);
 }
 
 
@@ -266,31 +253,16 @@ space [ \t]+
     exit(1);
 }
 
-
-<PRAG_TOKEN>(" ") {
-    LIST;
-}
-
 <PRAG_TOKEN>("on") {
     LIST;
     Opt_Token = 1;
-    BEGIN 0;
+    BEGIN(PRAG_END);
 }
 
 <PRAG_TOKEN>("off") {
     LIST;
     Opt_Token = 0;
-    BEGIN 0;
-}
-
-<PRAG_TOKEN>("/*")  {
-    LIST; 
-    BEGIN(COMMENT_C); 
-}
-
-<PRAG_TOKEN>("//")  {
-    LIST;
-    BEGIN(COMMENT_CPP);
+    BEGIN(PRAG_END);
 }
 
 <PRAG_TOKEN>("\n")  { 
@@ -304,30 +276,16 @@ space [ \t]+
 }
 
 
-<PRAG_STATISTIC>(" ") {
-    LIST;
-}
-
 <PRAG_STATISTIC>("on") {
     LIST;
     Opt_Statistic = 1;
-    BEGIN 0;
+    BEGIN(PRAG_END);
 }
 
 <PRAG_STATISTIC>("off") {
     LIST;
     Opt_Statistic = 0;
-    BEGIN 0;
-}
-
-<PRAG_STATISTIC>("/*")  {
-    LIST; 
-    BEGIN(COMMENT_C); 
-}
-
-<PRAG_STATISTIC>("//")  {
-    LIST;
-    BEGIN(COMMENT_CPP);
+    BEGIN(PRAG_END);
 }
 
 <PRAG_STATISTIC>("\n")  { 
@@ -335,6 +293,33 @@ space [ \t]+
     exit(1);
 }
 <PRAG_STATISTIC>(.) { // Unrecognized character
+    fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
+    exit(1);
+}
+
+
+<PRAG_END>{space} {LIST;}
+
+<PRAG_END>("\n") {
+    LIST;
+    if (Opt_Source) printf("%d:%s\n", linenum, buf);
+    ++linenum;
+    buf[0] = '\0';
+    BEGIN 0;
+}
+
+<PRAG_END>("/*")  {
+    LIST; 
+    BEGIN(COMMENT_C); 
+}
+
+<PRAG_END>("//")  {
+    LIST;
+    BEGIN(COMMENT_CPP);
+}
+
+<PRAG_END>(.) { // Unrecognized character
+
     fprintf(stderr, "Error at line %d: %s\n", linenum, yytext);
     exit(1);
 }
