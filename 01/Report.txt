@@ -1,6 +1,6 @@
 # NCTU-Compiler_Design-HW1-Lex
 
-	## Abilites
+	## Abilities
 		- parse string into token defined by spec.
 		- print out token type and content.
 		- output source code with line number.
@@ -12,7 +12,7 @@
 
 
 	## How to run scanner
-	- tpye make in directory with Makefile.
+	- type make in directory with Makefile.
   
   		`code...
     		./0516041> make
